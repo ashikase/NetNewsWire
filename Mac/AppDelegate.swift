@@ -61,6 +61,8 @@ var appDelegate: AppDelegate!
 	@IBOutlet var sortByNewestArticleOnTopMenuItem: NSMenuItem!
 	@IBOutlet var groupArticlesByFeedMenuItem: NSMenuItem!
 	@IBOutlet var checkForUpdatesMenuItem: NSMenuItem!
+	@IBOutlet var useTraditionalViewMenuItem: NSMenuItem!
+	@IBOutlet var useWidescreenViewMenuItem: NSMenuItem!
 
 	var unreadCount = 0 {
 		didSet {
@@ -207,6 +209,7 @@ var appDelegate: AppDelegate!
 
 		updateSortMenuItems()
 		updateGroupByFeedMenuItem()
+		updateLayoutMenuItems()
 
 		if mainWindowController == nil {
 			let mainWindowController = createAndShowMainWindow()
@@ -411,6 +414,7 @@ var appDelegate: AppDelegate!
 	@objc func userDefaultsDidChange(_ note: Notification) {
 		updateSortMenuItems()
 		updateGroupByFeedMenuItem()
+		updateLayoutMenuItems()
 
 		if lastRefreshInterval != AppDefaults.shared.refreshInterval {
 			refreshTimer?.update()
@@ -697,6 +701,14 @@ var appDelegate: AppDelegate!
 		AppDefaults.shared.timelineGroupByFeed.toggle()
 	}
 
+	@IBAction func layoutWithTraditionalView(_ sender: Any?) {
+		AppDefaults.shared.windowViewLayout = .traditional
+	}
+
+	@IBAction func layoutWithWidescreenView(_ sender: Any?) {
+		AppDefaults.shared.windowViewLayout = .widescreen
+	}
+
 	@IBAction func checkForUpdates(_ sender: Any?) {
 		#if !MAC_APP_STORE && !TEST
 			self.softwareUpdater.checkForUpdates()
@@ -850,6 +862,12 @@ extension AppDelegate {
 	func updateGroupByFeedMenuItem() {
 		let groupByFeedEnabled = AppDefaults.shared.timelineGroupByFeed
 		groupArticlesByFeedMenuItem.state = groupByFeedEnabled ? .on : .off
+	}
+
+	func updateLayoutMenuItems() {
+		let useWidescreen = AppDefaults.shared.windowViewLayout == .widescreen
+		useTraditionalViewMenuItem.state = useWidescreen ? .off : .on
+		useWidescreenViewMenuItem.state = useWidescreen ? .on : .off
 	}
 
 	func importTheme(filename: String) {

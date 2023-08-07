@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22146" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22146"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -414,6 +415,25 @@
                                                 <action selector="toggleTheSidebar:" target="Ady-hI-5gd" id="1hl-EZ-ao4"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Layout" id="Kka-BT-v3j" userLabel="Layout">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Layout" id="nPM-eb-pHT">
+                                                <items>
+                                                    <menuItem title="Traditional View" id="JS1-B8-55c">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="layoutWithTraditionalView:" target="Voe-Tx-rLC" id="juL-C3-0qi"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Widescreen View" id="cPP-tF-yqB">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="layoutWithWidescreenView:" target="Voe-Tx-rLC" id="oGZ-Zz-g2p"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="jKG-b2-ZWf"/>
                                         <menuItem title="Show Toolbar" keyEquivalent="t" id="snW-S8-Cw5">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
@@ -658,6 +678,8 @@
                         <outlet property="shareMenuItem" destination="jaf-gh-gSi" id="bqN-eF-bsE"/>
                         <outlet property="sortByNewestArticleOnTopMenuItem" destination="TNS-TV-n0U" id="gix-Nd-9k4"/>
                         <outlet property="sortByOldestArticleOnTopMenuItem" destination="iii-kP-qoF" id="fTe-Tf-EWG"/>
+                        <outlet property="useTraditionalViewMenuItem" destination="JS1-B8-55c" id="gVB-IP-qei"/>
+                        <outlet property="useWidescreenViewMenuItem" destination="cPP-tF-yqB" id="71N-zI-4up"/>
                     </connections>
                 </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

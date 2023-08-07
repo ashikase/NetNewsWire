@@ -97,6 +97,10 @@ enum TimelineSourceMode {
 
 		detailViewController = timelineDetailSplitViewController?.splitViewItems[1].viewController as? DetailViewController
 
+		updateWindowViewLayout()
+
+		NotificationCenter.default.addObserver(self, selector: #selector(userDefaultsDidChange(_:)), name: UserDefaults.didChangeNotification, object: nil)
+
 		NotificationCenter.default.addObserver(self, selector: #selector(refreshProgressDidChange(_:)), name: .AccountRefreshDidBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(refreshProgressDidChange(_:)), name: .AccountRefreshDidFinish, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(refreshProgressDidChange(_:)), name: .AccountRefreshProgressDidChange, object: nil)
@@ -146,6 +150,10 @@ enum TimelineSourceMode {
 	
 	// MARK: - Notifications
 
+	@objc func userDefaultsDidChange(_ note: Notification) {
+		updateWindowViewLayout()
+	}
+
 	@objc func refreshProgressDidChange(_ note: Notification) {
 		CoalescingQueue.standard.add(self, #selector(makeToolbarValidate))
 	}
@@ -164,6 +172,11 @@ enum TimelineSourceMode {
 
 	@objc func currentArticleThemeDidChangeNotification(_ note: Notification) {
 		updateArticleThemeMenu()
+	}
+
+	private func updateWindowViewLayout() {
+		let useWidescreen = AppDefaults.shared.windowViewLayout == .widescreen
+		timelineDetailSplitViewController?.splitView.isVertical = useWidescreen
 	}
 
 	private func updateWindowTitleIfNecessary(_ noteObject: Any?) {

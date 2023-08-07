@@ -14,6 +14,11 @@ enum FontSize: Int {
 	case veryLarge = 3
 }
 
+enum ViewLayout: Int {
+	case traditional = 0
+	case widescreen = 1
+}
+
 final class AppDefaults {
 
 	static let defaultThemeName = "Default"
@@ -24,6 +29,7 @@ final class AppDefaults {
 	struct Key {
 		static let firstRunDate = "firstRunDate"
 		static let windowState = "windowState"
+		static let windowViewLayout = "windowViewLayout"
 		static let lastImageCacheFlushDate = "lastImageCacheFlushDate"
 		static let sidebarFontSize = "sidebarFontSize"
 		static let timelineFontSize = "timelineFontSize"
@@ -83,6 +89,16 @@ final class AppDefaults {
 		}
 		set {
 			UserDefaults.standard.set(newValue, forKey: Key.windowState)
+		}
+	}
+
+	var windowViewLayout: ViewLayout {
+		get {
+			let rawValue = UserDefaults.standard.integer(forKey: Key.windowViewLayout)
+			return ViewLayout(rawValue: rawValue) ?? ViewLayout.widescreen
+		}
+		set {
+			UserDefaults.standard.set(newValue.rawValue, forKey: Key.windowViewLayout)
 		}
 	}
 
@@ -346,7 +362,8 @@ final class AppDefaults {
  		let showDebugMenu = false
  		#endif
 
-		let defaults: [String : Any] = [Key.sidebarFontSize: FontSize.medium.rawValue,
+		let defaults: [String : Any] = [Key.windowViewLayout: ViewLayout.widescreen.rawValue,
+										Key.sidebarFontSize: FontSize.medium.rawValue,
 										Key.timelineFontSize: FontSize.medium.rawValue,
 										Key.detailFontSize: FontSize.medium.rawValue,
 										Key.timelineSortDirection: ComparisonResult.orderedDescending.rawValue,
