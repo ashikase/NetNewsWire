@@ -92,10 +92,10 @@ enum TimelineSourceMode {
 		sidebarViewController!.splitViewItem = sidebarSplitViewItem
 		sidebarViewController!.delegate = self
 
-		timelineContainerViewController = splitViewController?.splitViewItems[1].viewController as? TimelineContainerViewController
+		timelineContainerViewController = timelineDetailSplitViewController?.splitViewItems[0].viewController as? TimelineContainerViewController
 		timelineContainerViewController!.delegate = self
 
-		detailViewController = splitViewController?.splitViewItems[2].viewController as? DetailViewController
+		detailViewController = timelineDetailSplitViewController?.splitViewItems[1].viewController as? DetailViewController
 
 		NotificationCenter.default.addObserver(self, selector: #selector(refreshProgressDidChange(_:)), name: .AccountRefreshDidBegin, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(refreshProgressDidChange(_:)), name: .AccountRefreshDidFinish, object: nil)
@@ -1050,6 +1050,10 @@ private extension MainWindowController {
 		return viewController.children.first as? NSSplitViewController
 	}
 
+	var timelineDetailSplitViewController: NSSplitViewController? {
+		return splitViewController?.splitViewItems[1].viewController as? NSSplitViewController
+	}
+	
 	var currentTimelineViewController: TimelineViewController? {
 		return timelineContainerViewController?.currentTimelineViewController
 	}
@@ -1063,7 +1067,7 @@ private extension MainWindowController {
 	}
 
 	var detailSplitViewItem: NSSplitViewItem? {
-		return splitViewController?.splitViewItems[2]
+		return timelineDetailSplitViewController?.splitViewItems[1]
 	}
 	
 	var selectedArticles: [Article]? {

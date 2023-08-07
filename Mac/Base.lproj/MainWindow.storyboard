@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22146" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22146"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,8 +35,7 @@
                 <splitViewController id="wEf-EP-9Fq" sceneMemberID="viewController">
                     <splitViewItems>
                         <splitViewItem canCollapse="YES" holdingPriority="260" behavior="sidebar" id="XVW-Gk-g7U"/>
-                        <splitViewItem holdingPriority="255" behavior="contentList" id="UkR-qu-7uT"/>
-                        <splitViewItem id="EtR-h8-kPm"/>
+                        <splitViewItem id="AOF-ZM-Qdv"/>
                     </splitViewItems>
                     <splitView key="splitView" wantsLayer="YES" dividerStyle="thin" vertical="YES" id="3QF-bA-qOw">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
@@ -48,13 +47,37 @@
                     <connections>
                         <outlet property="splitView" destination="3QF-bA-qOw" id="YxK-5q-cOe"/>
                         <segue destination="XML-A3-pDn" kind="relationship" relationship="splitItems" id="Dul-5N-qJu"/>
-                        <segue destination="36G-bQ-b96" kind="relationship" relationship="splitItems" id="yFZ-cm-NcZ"/>
-                        <segue destination="Vho-7i-T8m" kind="relationship" relationship="splitItems" id="Foq-XC-qoZ"/>
+                        <segue destination="xl9-OE-BpH" kind="relationship" relationship="splitItems" id="nC1-cU-q2K"/>
                     </connections>
                 </splitViewController>
                 <customObject id="FnK-xf-eZm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-607" y="805"/>
+        </scene>
+        <!--Split View Controller-->
+        <scene sceneID="Sco-FU-arP">
+            <objects>
+                <splitViewController id="xl9-OE-BpH" sceneMemberID="viewController">
+                    <splitViewItems>
+                        <splitViewItem holdingPriority="255" behavior="contentList" id="0Xj-yj-2UC"/>
+                        <splitViewItem id="7WJ-hV-gfg"/>
+                    </splitViewItems>
+                    <splitView key="splitView" dividerStyle="thin" vertical="YES" id="aT9-aS-SXh">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <connections>
+                            <outlet property="delegate" destination="xl9-OE-BpH" id="Lwn-Bp-eaK"/>
+                        </connections>
+                    </splitView>
+                    <connections>
+                        <outlet property="splitView" destination="aT9-aS-SXh" id="ftI-wJ-Ags"/>
+                        <segue destination="36G-bQ-b96" kind="relationship" relationship="splitItems" id="7Bj-9d-qIY"/>
+                        <segue destination="Vho-7i-T8m" kind="relationship" relationship="splitItems" id="4b0-2o-STR"/>
+                    </connections>
+                </splitViewController>
+                <customObject id="hva-8A-KAQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="37" y="1029"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ZPA-jO-OkH">
@@ -120,7 +143,7 @@
                                                             <rect key="frame" x="11" y="0.0" width="217" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fNJ-z1-0Up">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fNJ-z1-0Up">
                                                                     <rect key="frame" x="0.0" y="1" width="145" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="HEADER CELL" id="dRB-0K-qxz">
@@ -175,7 +198,7 @@
                                             <constraint firstAttribute="width" constant="40" id="1Yw-ER-8pT"/>
                                         </constraints>
                                     </progressIndicator>
-                                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="iyL-pW-cT6">
+                                    <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="iyL-pW-cT6">
                                         <rect key="frame" x="62" y="6" width="160" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Label" id="dVE-XG-mlU">
                                             <font key="font" metaFont="system"/>
@@ -240,7 +263,7 @@
                     </connections>
                 </customObject>
             </objects>
-            <point key="canvasLocation" x="-74" y="-186.5"/>
+            <point key="canvasLocation" x="-68" y="536"/>
         </scene>
         <!--Timeline Container View Controller-->
         <scene sceneID="zUD-i8-QYC">
@@ -252,9 +275,6 @@
                         <subviews>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lSU-OC-sEC">
                                 <rect key="frame" x="8" y="176" width="46" height="19"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="18" id="DoO-KI-ena"/>
-                                </constraints>
                                 <popUpButtonCell key="cell" type="recessed" title="Sort" bezelStyle="recessed" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="bl0-6I-cH2">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="smallSystemBold"/>
@@ -283,6 +303,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="DoO-KI-ena"/>
+                                </constraints>
                             </popUpButton>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iA5-go-AO0">
                                 <rect key="frame" x="350" y="180" width="13" height="13"/>
@@ -329,7 +352,7 @@
                     </connections>
                 </customObject>
             </objects>
-            <point key="canvasLocation" x="61.5" y="394"/>
+            <point key="canvasLocation" x="593" y="856"/>
         </scene>
         <!--Detail View Controller-->
         <scene sceneID="HMt-bN-oMN">
@@ -350,7 +373,7 @@
                             <customView hidden="YES" alphaValue="0.90000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="xI5-lx-RD8" customClass="DetailStatusBarView" customModule="NetNewsWire" customModuleProvider="target">
                                 <rect key="frame" x="6" y="2" width="12" height="20"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="850" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Dim-ed-Dcz" userLabel="URL Label">
+                                    <textField focusRingType="none" horizontalHuggingPriority="850" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Dim-ed-Dcz" userLabel="URL Label">
                                         <rect key="frame" x="4" y="2" width="4" height="16"/>
                                         <textFieldCell key="cell" lineBreakMode="truncatingMiddle" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" usesSingleLineMode="YES" id="znU-Fh-L7H">
                                             <font key="font" metaFont="system"/>
@@ -398,7 +421,7 @@
                 </viewController>
                 <customObject id="vzM-Vn-mEn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="68" y="946"/>
+            <point key="canvasLocation" x="770" y="1236"/>
         </scene>
     </scenes>
     <resources>
