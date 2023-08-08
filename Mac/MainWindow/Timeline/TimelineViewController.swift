@@ -216,7 +216,8 @@ final class TimelineViewController: NSViewController, UndoableCommandRunner, Unr
 		tableView.setDraggingSourceOperationMask(.copy, forLocal: false)
 		tableView.keyboardDelegate = keyboardDelegate
 		tableView.style = .inset
-		
+		tableView.tableColumns.first?.maxWidth = .greatestFiniteMagnitude
+
 		if !didRegisterForNotifications {
 			NotificationCenter.default.addObserver(self, selector: #selector(statusesDidChange(_:)), name: .StatusesDidChange, object: nil)
 			NotificationCenter.default.addObserver(self, selector: #selector(feedIconDidBecomeAvailable(_:)), name: .FeedIconDidBecomeAvailable, object: nil)
