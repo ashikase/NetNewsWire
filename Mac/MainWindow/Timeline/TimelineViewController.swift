@@ -234,7 +234,14 @@ final class TimelineViewController: NSViewController, UndoableCommandRunner, Unr
 			didRegisterForNotifications = true
 		}
 	}
-	
+
+	override func viewWillAppear() {
+		super.viewWillAppear()
+
+		// When the search view controller is first displayed, the width of the table column is set to the value in the xib.
+		tableView.sizeLastColumnToFit()
+	}
+
 	override func viewDidAppear() {
 		sharingServiceDelegate = SharingServiceDelegate(self.view.window)
 	}
