@@ -26,6 +26,7 @@ final class AppDefaults {
 		static let windowState = "windowState"
 		static let lastImageCacheFlushDate = "lastImageCacheFlushDate"
 		static let sidebarFontSize = "sidebarFontSize"
+		static let timelineCleanUpAutomatically = "timelineCleanUpAutomatically"
 		static let timelineFontSize = "timelineFontSize"
 		static let timelineSortDirection = "timelineSortDirection"
 		static let timelineGroupByFeed = "timelineGroupByFeed"
@@ -269,6 +270,15 @@ final class AppDefaults {
 			}
 		}
 	#endif
+
+	var timelineCleanUpAutomatically: Bool {
+		get {
+			return AppDefaults.bool(for: Key.timelineCleanUpAutomatically)
+		}
+		set {
+			AppDefaults.setBool(for: Key.timelineCleanUpAutomatically, newValue)
+		}
+	}
 
 	var timelineSortDirection: ComparisonResult {
 		get {

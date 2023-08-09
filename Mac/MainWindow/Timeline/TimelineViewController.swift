@@ -42,16 +42,16 @@ final class TimelineViewController: NSViewController, UndoableCommandRunner, Unr
 		}
 	}
 	
-	var isCleanUpAvailable: Bool {
-		let isEligibleForCleanUp: Bool?
-		
+	var isEligibleForCleanUp: Bool {
 		if representedObjects?.count == 1, let timelineFeed = representedObjects?.first as? FeedProtocol, timelineFeed.defaultReadFilterType == .alwaysRead {
-			isEligibleForCleanUp = true
+			return true
 		} else {
-			isEligibleForCleanUp = isReadFiltered
+			return isReadFiltered ?? false
 		}
+	}
 
-		guard isEligibleForCleanUp ?? false else { return false }
+	var isCleanUpAvailable: Bool {
+		guard isEligibleForCleanUp else { return false }
 		
 		let readSelectedCount = selectedArticles.filter({ $0.status.read }).count
 		let readArticleCount = articles.count - unreadCount
@@ -937,19 +937,17 @@ extension TimelineViewController: NSTableViewDelegate {
 	}
 
 	func tableViewSelectionDidChange(_ notification: Notification) {
-		if selectedArticles.isEmpty {
-			selectionDidChange(nil)
-			return
-		}
-
-		if selectedArticles.count == 1 {
-			let article = selectedArticles.first!
-			if !article.status.read {
+		if selectedArticles.count <= 1 {
+			if let article = selectedArticles.first, !article.status.read {
 				markArticles(Set([article]), statusKey: .read, flag: true)
+			}
+
+			if AppDefaults.shared.timelineCleanUpAutomatically && isEligibleForCleanUp {
+				cleanUp()
 			}
 		}
 
-		selectionDidChange(selectedArticles)
+		selectionDidChange(!selectedArticles.isEmpty ? selectedArticles : nil)
 	}
 
 	private func selectionDidChange(_ selectedArticles: ArticleArray?) {
