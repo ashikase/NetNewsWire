@@ -54,9 +54,9 @@ import AppKit
 		let showIcon = cellData.showIcon
 		var textBoxRect = TimelineCellLayout.rectForTextBox(appearance, cellData, showIcon, width)
 
-		let (titleRect, numberOfLinesForTitle) = TimelineCellLayout.rectForTitle(textBoxRect, appearance, cellData)
+		var (titleRect, numberOfLinesForTitle) = TimelineCellLayout.rectForTitle(textBoxRect, appearance, cellData)
 		let summaryRect = numberOfLinesForTitle > 0 ? TimelineCellLayout.rectForSummary(textBoxRect, titleRect, numberOfLinesForTitle, appearance, cellData) : NSRect.zero
-		let textRect = numberOfLinesForTitle > 0 ? NSRect.zero : TimelineCellLayout.rectForText(textBoxRect, appearance, cellData)
+		var textRect = numberOfLinesForTitle > 0 ? NSRect.zero : TimelineCellLayout.rectForText(textBoxRect, appearance, cellData)
 
 		var lastTextRect = titleRect
 		if numberOfLinesForTitle == 0 {
@@ -69,6 +69,14 @@ import AppKit
 		}
 		let dateRect = TimelineCellLayout.rectForDate(textBoxRect, lastTextRect, appearance, cellData)
 		let feedNameRect = TimelineCellLayout.rectForFeedName(textBoxRect, dateRect, appearance, cellData)
+
+		if appearance.useSingleLineLayout {
+			if numberOfLinesForTitle == 0 {
+				textRect.size.width -= (dateRect.size.width + appearance.dateMarginLeft)
+			} else {
+				titleRect.size.width -= (dateRect.size.width + appearance.dateMarginLeft)
+			}
+		}
 
 		textBoxRect.size.height = ceil([titleRect, summaryRect, textRect, dateRect, feedNameRect].maxY() - textBoxRect.origin.y)
 		let iconImageRect = TimelineCellLayout.rectForIcon(cellData, appearance, showIcon, textBoxRect, width, height)
@@ -124,7 +132,7 @@ private extension TimelineCellLayout {
 	}
 
 	static func rectForSummary(_ textBoxRect: NSRect, _ titleRect: NSRect, _ titleNumberOfLines: Int,  _ appearance: TimelineCellAppearance, _ cellData: TimelineCellData) -> NSRect {
-		if titleNumberOfLines >= appearance.titleNumberOfLines || cellData.text.isEmpty {
+		if appearance.useSingleLineLayout || titleNumberOfLines >= appearance.titleNumberOfLines || cellData.text.isEmpty {
 			return NSRect.zero
 		}
 
@@ -162,16 +170,16 @@ private extension TimelineCellLayout {
 		
 		var r = NSZeroRect
 		r.size = textFieldSize
-		r.origin.y = NSMaxY(rectAbove) + appearance.titleBottomMargin
-		r.size.width = textFieldSize.width
-
+		r.origin.y = appearance.useSingleLineLayout
+			? rectAbove.midY - (r.size.height / 2.0)
+			: NSMaxY(rectAbove) + appearance.titleBottomMargin
 		r.origin.x = textBoxRect.maxX - textFieldSize.width
 
 		return r
 	}
 
 	static func rectForFeedName(_ textBoxRect: NSRect, _ dateRect: NSRect, _ appearance: TimelineCellAppearance, _ cellData: TimelineCellData) -> NSRect {
-		if cellData.showFeedName == .none {
+		if appearance.useSingleLineLayout || cellData.showFeedName == .none {
 			return NSZeroRect
 		}
 
@@ -190,9 +198,9 @@ private extension TimelineCellLayout {
 		var r = NSZeroRect
 		r.size = NSSize(width: appearance.unreadCircleDimension, height: appearance.unreadCircleDimension)
 		r.origin.x = appearance.cellPadding.left
-		r.origin.y = titleRect.minY + 6
-//		r = RSRectCenteredVerticallyInRect(r, titleRect)
-//		r.origin.y += 1
+		r.origin.y = appearance.useSingleLineLayout
+			? titleRect.midY - (r.size.height / 2.0) + 1.0
+			: titleRect.minY + 6
 
 		return r
 	}
@@ -215,7 +223,9 @@ private extension TimelineCellLayout {
 		}
 		r.size = appearance.iconSize
 		r.origin.x = appearance.cellPadding.left + appearance.unreadCircleDimension + appearance.unreadCircleMarginRight
-		r.origin.y = textBoxRect.origin.y + appearance.iconAdjustmentTop
+		r.origin.y = appearance.useSingleLineLayout
+			? textBoxRect.midY - (r.size.height / 2.0)
+			: textBoxRect.origin.y + appearance.iconAdjustmentTop
 
 		return r
 	}

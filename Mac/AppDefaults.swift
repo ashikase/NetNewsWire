@@ -8,6 +8,11 @@
 
 import AppKit
 
+enum CellLayout: Int {
+	case singleLine = 0
+	case multipleLine = 1
+}
+
 enum FontSize: Int {
 	case small = 0
 	case medium = 1
@@ -26,6 +31,7 @@ final class AppDefaults: Sendable {
 		static let windowState = "windowState"
 		static let lastImageCacheFlushDate = "lastImageCacheFlushDate"
 		static let sidebarFontSize = "sidebarFontSize"
+		static let timelineCellLayout = "timelineCellLayout"
 		static let timelineFontSize = "timelineFontSize"
 		static let timelineSortDirection = "timelineSortDirection"
 		static let timelineGroupByFeed = "timelineGroupByFeed"
@@ -257,6 +263,16 @@ final class AppDefaults: Sendable {
 			}
 		}
 	#endif
+
+	var timelineCellLayout: CellLayout {
+		get {
+			let rawValue = UserDefaults.standard.integer(forKey: Key.timelineCellLayout)
+			return CellLayout(rawValue: rawValue) ?? .multipleLine
+		}
+		set {
+			UserDefaults.standard.set(newValue.rawValue, forKey: Key.timelineCellLayout)
+		}
+	}
 
 	var timelineSortDirection: ComparisonResult {
 		get {

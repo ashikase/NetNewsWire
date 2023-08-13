@@ -63,6 +63,8 @@ import Sparkle
 	@IBOutlet var sortByNewestArticleOnTopMenuItem: NSMenuItem!
 	@IBOutlet var groupArticlesByFeedMenuItem: NSMenuItem!
 	@IBOutlet var checkForUpdatesMenuItem: NSMenuItem!
+	@IBOutlet var useSingleLineMenuItem: NSMenuItem!
+	@IBOutlet var useMultipleLineMenuItem: NSMenuItem!
 
 	var unreadCount = 0 {
 		didSet {
@@ -185,7 +187,8 @@ import Sparkle
 
 		updateSortMenuItems()
 		updateGroupByFeedMenuItem()
-		
+		updateLayoutMenuItems()
+
 		if mainWindowController == nil {
 			let mainWindowController = createAndShowMainWindow()
 			mainWindowController.restoreStateFromUserDefaults()
@@ -355,7 +358,8 @@ import Sparkle
 	@objc func userDefaultsDidChange(_ note: Notification) {
 		updateSortMenuItems()
 		updateGroupByFeedMenuItem()
-		
+		updateLayoutMenuItems()
+
 		if lastRefreshInterval != AppDefaults.shared.refreshInterval {
 			refreshTimer?.update()
 			lastRefreshInterval = AppDefaults.shared.refreshInterval
@@ -688,6 +692,14 @@ import Sparkle
 		AppDefaults.shared.timelineGroupByFeed.toggle()
 	}
 
+	@IBAction func layoutTimelineWithSingleLine(_ sender: Any?) {
+		AppDefaults.shared.timelineCellLayout = .singleLine
+	}
+
+	@IBAction func layoutTimelineWithMultipleLine(_ sender: Any?) {
+		AppDefaults.shared.timelineCellLayout = .multipleLine
+	}
+
 	@IBAction func checkForUpdates(_ sender: Any?) {
 		#if !MAC_APP_STORE && !TEST
 			self.softwareUpdater.checkForUpdates()
@@ -780,7 +792,13 @@ internal extension AppDelegate {
 		let groupByFeedEnabled = AppDefaults.shared.timelineGroupByFeed
 		groupArticlesByFeedMenuItem.state = groupByFeedEnabled ? .on : .off
 	}
-	
+
+	func updateLayoutMenuItems() {
+		let useSingleLine = AppDefaults.shared.timelineCellLayout == .singleLine
+		useSingleLineMenuItem.state = useSingleLine ? .on : .off
+		useMultipleLineMenuItem.state = useSingleLine ? .off : .on
+	}
+
 	func importTheme(filename: String) {
 		guard let window = mainWindowController?.window else { return }
 		

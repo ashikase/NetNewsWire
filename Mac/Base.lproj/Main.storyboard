@@ -403,6 +403,25 @@
                                                 <action selector="toggleTheSidebar:" target="Ady-hI-5gd" id="1hl-EZ-ao4"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Layout" id="Kka-BT-v3j" userLabel="Layout">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Layout" id="nPM-eb-pHT">
+                                                <items>
+                                                    <menuItem title="Single Line" id="6r4-Lt-RYW">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="layoutTimelineWithSingleLine:" target="Voe-Tx-rLC" id="jIq-1e-bKt"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Multiple Line" id="JbL-0e-ws3">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="layoutTimelineWithMultipleLine:" target="Voe-Tx-rLC" id="7nd-BD-wdP"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="jKG-b2-ZWf"/>
                                         <menuItem title="Show Toolbar" keyEquivalent="t" id="snW-S8-Cw5">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
@@ -675,6 +694,8 @@
                         <outlet property="groupArticlesByFeedMenuItem" destination="Zxm-O6-NRE" id="gwn-VT-2YZ"/>
                         <outlet property="sortByNewestArticleOnTopMenuItem" destination="TNS-TV-n0U" id="gix-Nd-9k4"/>
                         <outlet property="sortByOldestArticleOnTopMenuItem" destination="iii-kP-qoF" id="fTe-Tf-EWG"/>
+                        <outlet property="useMultipleLineMenuItem" destination="JbL-0e-ws3" id="S7E-xJ-gGe"/>
+                        <outlet property="useSingleLineMenuItem" destination="6r4-Lt-RYW" id="CnL-Oj-eBw"/>
                     </connections>
                 </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

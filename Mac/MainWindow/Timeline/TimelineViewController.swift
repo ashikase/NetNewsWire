@@ -165,6 +165,13 @@ final class TimelineViewController: NSViewController, UndoableCommandRunner, Unr
 	private var didRegisterForNotifications = false
 	static let fetchAndMergeArticlesQueue = CoalescingQueue(name: "Fetch and Merge Articles", interval: 0.5)
 
+	private var cellLayout = AppDefaults.shared.timelineCellLayout {
+		didSet {
+			if cellLayout != oldValue {
+				cellLayoutDidChange()
+			}
+		}
+	}
 	private var sortDirection = AppDefaults.shared.timelineSortDirection {
 		didSet {
 			if sortDirection != oldValue {
@@ -679,6 +686,7 @@ final class TimelineViewController: NSViewController, UndoableCommandRunner, Unr
 	}
 
 	@objc func userDefaultsDidChange(_ note: Notification) {
+		self.cellLayout = AppDefaults.shared.timelineCellLayout
 		self.fontSize = AppDefaults.shared.timelineFontSize
 		self.sortDirection = AppDefaults.shared.timelineSortDirection
 		self.groupByFeed = AppDefaults.shared.timelineGroupByFeed
@@ -1105,13 +1113,21 @@ private extension TimelineViewController {
 
 	// MARK: - Appearance Change
 
-	private func fontSizeDidChange() {
+	private func updateCellAppearanceAndRowHeight() {
 		cellAppearance = TimelineCellAppearance(showIcon: false, fontSize: fontSize)
 		cellAppearanceWithIcon = TimelineCellAppearance(showIcon: true, fontSize: fontSize)
 		updateRowHeights()
 		performBlockAndRestoreSelection {
 			tableView.reloadData()
 		}
+	}
+
+	private func fontSizeDidChange() {
+		updateCellAppearanceAndRowHeight()
+	}
+
+	private func cellLayoutDidChange() {
+		updateCellAppearanceAndRowHeight()
 	}
 
 	// MARK: - Fetching Articles

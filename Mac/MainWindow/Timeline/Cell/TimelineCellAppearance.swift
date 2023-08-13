@@ -11,6 +11,7 @@ import AppKit
 struct TimelineCellAppearance: Equatable {
 
 	let showIcon: Bool
+    let useSingleLineLayout: Bool
 
 	let cellPadding: NSEdgeInsets
 	
@@ -21,8 +22,8 @@ struct TimelineCellAppearance: Equatable {
 
 	let titleFont: NSFont
 	let titleBottomMargin: CGFloat = 1.0
-	let titleNumberOfLines = 3
-	
+	let titleNumberOfLines: Int
+
 	let textFont: NSFont
 
 	let textOnlyFont: NSFont
@@ -34,17 +35,32 @@ struct TimelineCellAppearance: Equatable {
 
 	let drawsGrid = false
 
-	let iconSize = NSSize(width: 48, height: 48)
+	let iconSize: NSSize
+	let iconAdjustmentTop: CGFloat
 	let iconMarginLeft: CGFloat = 8.0
 	let iconMarginRight: CGFloat = 8.0
-	let iconAdjustmentTop: CGFloat = 4.0
 	let iconCornerRadius: CGFloat = 4.0
 
 	let boxLeftMargin: CGFloat
 
 	init(showIcon: Bool, fontSize: FontSize) {
+        self.useSingleLineLayout = AppDefaults.shared.timelineCellLayout == .singleLine
 
-		let actualFontSize = AppDefaults.shared.actualFontSize(for: fontSize)
+        let actualFontSize: CGFloat
+		if (useSingleLineLayout) {
+            actualFontSize = AppDefaults.shared.actualFontSize(for: .small)
+            self.titleNumberOfLines = 1
+            self.iconSize = NSSize(width: 16, height: 16)
+            self.iconAdjustmentTop = 0.0
+            self.cellPadding = NSEdgeInsets(top: 2.0, left: 4.0, bottom: 2.0, right: 4.0)
+        } else {
+            actualFontSize = AppDefaults.shared.actualFontSize(for: fontSize)
+            self.titleNumberOfLines = 3
+            self.iconSize = NSSize(width: 48, height: 48)
+            self.iconAdjustmentTop = 4.0
+            self.cellPadding = NSEdgeInsets(top: 8.0, left: 4.0, bottom: 10.0, right: 4.0)
+        }
+
 		let smallItemFontSize = floor(actualFontSize * 0.90)
 		let largeItemFontSize = actualFontSize
 
@@ -56,8 +72,6 @@ struct TimelineCellAppearance: Equatable {
 
 		self.showIcon = showIcon
 		
-		cellPadding = NSEdgeInsets(top: 8.0, left: 4.0, bottom: 10.0, right: 4.0)
-
 		let margin = self.cellPadding.left + self.unreadCircleDimension + self.unreadCircleMarginRight
 		self.boxLeftMargin = margin
 	}
