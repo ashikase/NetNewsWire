@@ -41,7 +41,12 @@ enum TimelineSourceMode {
 		return window?.toolbar?.existingItem(withIdentifier: .share)
 	}
 
-	private static var detailViewMinimumThickness = 384
+	private static var timelineContainerViewMinimumHeight = 252
+	private static var detailViewMinimumWidth = 384
+	private static var detailViewMinimumHeight = 250
+
+	private var timelineDetailTraditionalConstraints: [NSLayoutConstraint] = []
+
 	private var sidebarViewController: SidebarViewController?
 	private var timelineContainerViewController: TimelineContainerViewController?
 	private var detailViewController: DetailViewController?
@@ -85,8 +90,6 @@ enum TimelineSourceMode {
 			window.setPointAndSizeAdjustingForScreen(point: point, size: size, minimumSize: minSize)
 		}
 
-		detailSplitViewItem?.minimumThickness = CGFloat(MainWindowController.detailViewMinimumThickness)
-
 		let sidebarSplitViewItem = splitViewController?.splitViewItems[0]
 		sidebarViewController = sidebarSplitViewItem?.viewController as? SidebarViewController
 		sidebarViewController!.splitViewItem = sidebarSplitViewItem
@@ -94,8 +97,29 @@ enum TimelineSourceMode {
 
 		timelineContainerViewController = timelineDetailSplitViewController?.splitViewItems[0].viewController as? TimelineContainerViewController
 		timelineContainerViewController!.delegate = self
+		if let timelineContainerView = timelineContainerViewController?.view {
+			timelineDetailTraditionalConstraints.append(
+				NSLayoutConstraint(item: timelineContainerView, attribute: .height, relatedBy: .greaterThanOrEqual,
+					toItem: nil, attribute: .notAnAttribute,
+					multiplier: 1.0, constant: CGFloat(MainWindowController.timelineContainerViewMinimumHeight))
+			)
+		}
 
 		detailViewController = timelineDetailSplitViewController?.splitViewItems[1].viewController as? DetailViewController
+		if let detailView = detailViewController?.view {
+			// Set minimum width of detail view (for both traditional and widescreen layout).
+			// NOTE: Setting minimumThickness on detailSplitViewItem should be enough, but it seems that it only
+			//       affects the initial splitview layout (left-right or top-bottom) as set in the storyboard.
+			NSLayoutConstraint(item: detailView, attribute: .width, relatedBy: .greaterThanOrEqual,
+			    toItem: nil, attribute: .notAnAttribute,
+			    multiplier: 1.0, constant: CGFloat(MainWindowController.detailViewMinimumWidth)).isActive = true
+
+			timelineDetailTraditionalConstraints.append(
+				NSLayoutConstraint(item: detailView, attribute: .height, relatedBy: .greaterThanOrEqual,
+					toItem: nil, attribute: .notAnAttribute,
+					multiplier: 1.0, constant: CGFloat(MainWindowController.detailViewMinimumHeight))
+			)
+		}
 
 		updateWindowViewLayout()
 
@@ -176,7 +200,13 @@ enum TimelineSourceMode {
 
 	private func updateWindowViewLayout() {
 		let useWidescreen = AppDefaults.shared.windowViewLayout == .widescreen
-		timelineDetailSplitViewController?.splitView.isVertical = useWidescreen
+		if useWidescreen {
+			timelineDetailSplitViewController?.splitView.isVertical = true
+			NSLayoutConstraint.deactivate(timelineDetailTraditionalConstraints)
+		} else {
+			timelineDetailSplitViewController?.splitView.isVertical = false
+			NSLayoutConstraint.activate(timelineDetailTraditionalConstraints)
+		}
 	}
 
 	private func updateWindowTitleIfNecessary(_ noteObject: Any?) {
@@ -1420,8 +1450,8 @@ private extension MainWindowController {
 		let sidebarWidth: Int = widths[0]
 		let timelineWidth: Int = widths[1]
 
-		// Make sure the detail view has its minimum thickness, at least.
-		if windowWidth < sidebarWidth + dividerThickness + timelineWidth + dividerThickness + MainWindowController.detailViewMinimumThickness {
+		// Make sure the detail view has its minimum width, at least.
+		if windowWidth < sidebarWidth + dividerThickness + timelineWidth + dividerThickness + MainWindowController.detailViewMinimumWidth {
 			return
 		}
 
