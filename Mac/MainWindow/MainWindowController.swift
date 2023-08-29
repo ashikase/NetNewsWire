@@ -28,6 +28,7 @@ enum TimelineSourceMode {
 
 	private let windowAutosaveName = NSWindow.FrameAutosaveName("MainWindow")
 	private static let mainWindowWidthsStateKey = "mainWindowWidthsStateKey"
+	private static let timelineDetailDimensionsStateKey = "timelineDetailDimensionsStateKey"
 
 	private var currentFeedOrFolder: AnyObject? {
 		// Nil for none or multiple selection.
@@ -1427,13 +1428,19 @@ private extension MainWindowController {
 	}
 
 	func saveSplitViewState(to state: inout [AnyHashable : Any]) {
-		guard let splitView = splitViewController?.splitView else {
-			return
-		}
+		guard
+			let splitView = splitViewController?.splitView,
+			let timelineDetailSplitView = timelineDetailSplitViewController?.splitView
+		else { return }
 
 		let widths = splitView.arrangedSubviews.map{ Int(floor($0.frame.width)) }
 		state[MainWindowController.mainWindowWidthsStateKey] = widths
-		
+
+		let dimensions = timelineDetailSplitView.isVertical
+			? timelineDetailSplitView.arrangedSubviews.map{ Int(floor($0.frame.width)) }
+			: timelineDetailSplitView.arrangedSubviews.map{ Int(floor($0.frame.height)) }
+		state[MainWindowController.timelineDetailDimensionsStateKey] = dimensions
+
 		state[UserInfoKey.isSidebarHidden] = sidebarSplitViewItem?.isCollapsed
 	}
 
