@@ -168,8 +168,8 @@ enum TimelineSourceMode {
 	
 	func restoreStateFromUserDefaults() {
 		if let state = AppDefaults.shared.windowState {
-			restoreState(from: state)
 			window?.setFrameUsingName(windowAutosaveName, force: true)
+			restoreState(from: state)
 		}
 	}
 	
