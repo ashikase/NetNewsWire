@@ -905,7 +905,7 @@ extension MainWindowController: NSToolbarDelegate {
 			return buildToolbarButton(.toggleReadArticlesFilter, title, AppAssets.filterInactive, "toggleReadArticlesFilter:")
 		
 		case .timelineTrackingSeparator:
-			return NSTrackingSeparatorToolbarItem(identifier: .timelineTrackingSeparator, splitView: splitViewController!.splitView, dividerIndex: 1)
+			return NSTrackingSeparatorToolbarItem(identifier: .timelineTrackingSeparator, splitView: timelineDetailSplitViewController!.splitView, dividerIndex: 0)
 
 		case .markRead:
 			let title = NSLocalizedString("button.title.mark-read", comment: "Mark Read")
