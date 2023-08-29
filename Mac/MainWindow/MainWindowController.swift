@@ -1445,26 +1445,39 @@ private extension MainWindowController {
 	}
 
 	func restoreSplitViewState(from state: [AnyHashable : Any]) {
-		guard let splitView = splitViewController?.splitView,
-			let widths = state[MainWindowController.mainWindowWidthsStateKey] as? [Int],
-			widths.count == 3,
-			let window = window else {
-				return
-		}
+		guard
+			let splitView = splitViewController?.splitView,
+			let timelineDetailSplitView = timelineDetailSplitViewController?.splitView,
+			let widths = state[MainWindowController.mainWindowWidthsStateKey] as? [Int], widths.count == 2,
+			let dimensions = state[MainWindowController.timelineDetailDimensionsStateKey] as? [Int], dimensions.count == 2,
+			let window = window
+		else { return }
 
 		let windowWidth = Int(floor(window.frame.width))
-		let dividerThickness: Int = Int(splitView.dividerThickness)
-		let sidebarWidth: Int = widths[0]
-		let timelineWidth: Int = widths[1]
+		let sidebarWidth = widths[0]
+		let dividerThickness = Int(splitView.dividerThickness)
+		let timelineDimension = dimensions[0]
+		let timelineDetailDividerThickness = Int(timelineDetailSplitView.dividerThickness)
 
-		// Make sure the detail view has its minimum width, at least.
-		if windowWidth < sidebarWidth + dividerThickness + timelineWidth + dividerThickness + MainWindowController.detailViewMinimumWidth {
-			return
+		if timelineDetailSplitView.isVertical {
+			// Make sure the detail view has its minimum width, at least.
+			if windowWidth < sidebarWidth + dividerThickness + timelineDimension + timelineDetailDividerThickness + MainWindowController.detailViewMinimumWidth {
+				return
+			}
+		} else {
+			// Make sure the detail view has its minimum height and width.
+			let windowHeight = Int(floor(window.frame.height))
+			if windowHeight < timelineDimension + timelineDetailDividerThickness + MainWindowController.detailViewMinimumHeight {
+				return
+			}
+			if windowWidth < sidebarWidth + dividerThickness + MainWindowController.detailViewMinimumWidth {
+				return
+			}
 		}
 
 		splitView.setPosition(CGFloat(sidebarWidth), ofDividerAt: 0)
-		splitView.setPosition(CGFloat(sidebarWidth + dividerThickness + timelineWidth), ofDividerAt: 1)
-		
+		timelineDetailSplitView.setPosition(CGFloat(timelineDimension), ofDividerAt: 0)
+
 		let isSidebarHidden = state[UserInfoKey.isSidebarHidden] as? Bool ?? false
 		
 		if !(sidebarSplitViewItem?.isCollapsed ?? false) && isSidebarHidden {
